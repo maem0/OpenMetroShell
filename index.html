@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Charms Bar</title>
+    <style>
+  * {
+            cursor: default !important;
+            user-select: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            position: fixed; 
+            right: 0;
+            top: 0; 
+            width: 85px;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s ease;
+            background-color: #11111100;
+        }
+
+        .sidebar.preview {
+            background-color: #ffffff00;
+        }
+
+        .sidebar.active {
+            background-color: #111111;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 85px;
+            padding: 10px 0px;
+            transition: background-color 0.2s;
+            position: relative;
+            opacity: 0;
+        }
+
+        .icon-wrapper:hover {
+            background-color: #333333; 
+        }
+
+        .icon {
+            width: 40px; 
+            height: 40px;
+            transition: opacity 0.2s ease;
+        }
+
+        .subtitle {
+            margin-top: 5px;
+            color: #a0a0a0;
+            font-size: 14px; 
+            opacity: 0; 
+            transition: opacity 0.2s ease; 
+        }
+
+        .sidebar.active .subtitle {
+            opacity: 1;
+        }
+
+        .icon-container.active .icon-wrapper {
+            animation: slideIn 0.3s forwards;
+        }
+
+        .icon-container.active .icon-wrapper:nth-child(1) { animation-delay: 0.2s; }
+        .icon-container.active .icon-wrapper:nth-child(2) { animation-delay: 0.1s; }
+        .icon-container.active .icon-wrapper:nth-child(3) { animation-delay: 0s; }
+        .icon-container.active .icon-wrapper:nth-child(4) { animation-delay: 0.1s; }
+        .icon-container.active .icon-wrapper:nth-child(5) { animation-delay: 0.2s; }
+
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .info-container {
+    position: fixed;
+    display: flex;
+    bottom: 50px;
+    left: 50px;
+    padding: 40px 30px;
+    background-color: #111111;
+    color: #fff;
+    font-weight: 100;
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.2s ease, visibility 0.2s ease; 
+    align-items: center;
+}
+
+.sidebar.active ~ .info-container {
+    opacity: 1; 
+    visibility: visible;
+
+}
+
+
+        .network-icon {
+            width: 20px;
+            height: 20px;
+padding: 5px;
+        }
+        
+        .battery-icon {
+            width: 20px;
+            height: 20px;
+padding: 5px;
+        }
+        .time {
+            font-size: 64px;
+            margin-right: 20px;
+        }
+
+        .day-date {
+            font-size: 30px;
+            line-height: 1;
+        }
+        .icon-stack {
+      display: flex;
+      flex-direction: column; 
+      align-items: center; 
+      margin-right: 5px;
+    }
+
+    .startscreencorner {
+/* soonTM */
+        position: absolute;
+        opacity: 0;
+bottom: 0;
+left:0;
+    }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="content">
+            <div class="icon-container">
+                <div class="icon-wrapper">
+                    <img src="Assets/Images/SearchInactive.png" class="icon" alt="Search">
+                    <span class="subtitle">Search</span>
+                </div>
+                <div class="icon-wrapper">
+                    <img src="Assets/Images/ShareInactive.png" class="icon" alt="Share">
+                    <span class="subtitle">Share</span>
+                </div>
+                <div class="icon-wrapper" id="start-button">
+                    <img src="Assets/Images/Windows8Inactive.png" class="icon" alt="Start">
+                    <span class="subtitle">Start</span>
+                </div>
+                <div class="icon-wrapper">
+                    <img src="Assets/Images/DevicesInactive.png" class="icon" alt="Devices">
+                    <span class="subtitle">Devices</span>
+                </div>
+                <div class="icon-wrapper">
+                    <img src="Assets/Images/SettingsInactive.png" class="icon" alt="Settings">
+                    <span class="subtitle">Settings</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <div class="info-container">
+        <div class="icon-stack">
+            <img src="Assets/Images/Icon103.png" class="network-icon">
+            <img src="Assets/Images/BatteryFull.png" class="battery-icon">
+          </div>
+
+        <div class="time" id="time">Date</div>
+        <div class="day-date" id="day-date">
+          Day<br>
+          1 Month
+        </div>
+      </div>
+
+      <div class="startscreencorner">
+        <img src="Assets/Images/StartScreen.png">
+    </div>
+      <script>
+        function updateTimeAndDate() {
+          const now = new Date();
+          const hours = now.getHours().toString().padStart(2, '0');
+          const minutes = now.getMinutes().toString().padStart(2, '0');
+    
+          const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+          const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          
+          const day = days[now.getDay()];
+          const date = now.getDate();
+          const month = months[now.getMonth()];
+
+          document.getElementById('time').textContent = `${hours}:${minutes}`;
+          document.getElementById('day-date').innerHTML = `${day}<br>${date} ${month}`;
+        }
+
+        updateTimeAndDate();
+        setInterval(updateTimeAndDate, 60000);
+      </script>
+
+    <script>
+        const sidebar = document.querySelector('.sidebar');
+        const iconContainer = document.querySelector('.icon-container');
+        
+        window.electron.onUpdateState((state) => {
+            sidebar.classList.remove('preview', 'active');
+            iconContainer.classList.remove('active');
+
+            if (state !== 'hidden') {
+                sidebar.classList.add(state);
+                iconContainer.classList.add('active');
+            }
+        });        
+    </script>
+        <script>
+            document.getElementById('start-button').addEventListener('click', () => {
+                window.electron.openStartScreen();
+            });
+        </script>
+</body>
+</html>

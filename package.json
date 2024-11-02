@@ -1,0 +1,14 @@
+{
+    "name": "OpenMetroShell",
+    "version": "1.0.0",
+    "description": "Charms Bar, Start Screen, and other Metro elements in Electron.",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "package": "electron-packager . OpenMetroShell --platform=win32 --arch=x64 --out=dist --overwrite"
+    },
+    "devDependencies": {
+        "electron": "^28.3.3",
+        "electron-packager": "^17.1.2"
+    }
+}

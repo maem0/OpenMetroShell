@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Start Screen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="page start">
+            <div class="title">Start</div>
+
+            <div id="usercard">
+                User
+                <div id="usericon"></div>
+            </div>
+            <div class="grids-container" id="gridsContainer"></div>
+            <button class="switch-button" onclick="switchPage(2)"></button>
+        </div>
+        <div class="page apps">
+            <div class="title">Apps</div>
+            <div class="grid-container" id="shortcutsGrid"></div>
+
+            <button class="switch-button" onclick="switchPage(1)"></button>
+        </div>
+    </div>
+    <script src="tile.js"></script>
+
+    <script src="apps.js"></script>
+    <script>
+        function switchPage(pageNumber) {
+            const container = document.getElementById('container');
+            if (pageNumber === 1) {
+                container.classList.remove('move-to-apps');
+            } else if (pageNumber === 2) {
+                container.classList.add('move-to-apps');
+            }
+        }
+        let currentPage = 1;
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'Tab') {
+                event.preventDefault();
+
+                currentPage = currentPage === 1 ? 2 : 1;
+
+                switchPage(currentPage);
+            }
+        });
+    </script>
+</body>
+
+</html>
