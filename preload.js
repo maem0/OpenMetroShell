@@ -17,5 +17,10 @@ contextBridge.exposeInMainWorld('electron', {
     },
     showDesktop: () => {
         ipcRenderer.send('show-desktop');
-    }
-});
+    },
+
+        navigateToApps: () => {
+            ipcRenderer.send('navigate-to-apps');
+        },
+    });
+    

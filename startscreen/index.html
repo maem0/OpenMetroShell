@@ -1,54 +1,99 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Start Screen</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <div class="container" id="container">
-        <div class="page start">
-            <div class="title">Start</div>
+  <div class="user-dropdown" id="userDropdown">
+    <div class="user-icon" id="userIcon" onclick="toggleDropdown()">
+      <span id="username">User</span>
+      <img src="User.png" alt="User Icon">
+    </div>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <div class="dropdown-item" onclick="changeUserIcon()">Change User Icon</div>
+      <div class="dropdown-item" onclick="lockScreen()">Lock</div>
+      <div class="dropdown-item" onclick="signOut()">Sign Out</div>
+    </div>
+  </div>
 
-            <div id="usercard">
-                User
-                <div id="usericon"></div>
-            </div>
-            <div class="grids-container" id="gridsContainer"></div>
-            <button class="switch-button" onclick="switchPage(2)"></button>
-        </div>
-        <div class="page apps">
-            <div class="title">Apps</div>
-            <div class="grid-container" id="shortcutsGrid"></div>
+  <div id="page1" class="page active">
+    <h1 class="title">Start</h1>
+    <div class="content">
+        <div class="tile-container" id="tileContainer">
+            <div class="droparea" id="leftdroparea"></div>
+        </div>        
+    </div>
+  </div>
 
-            <button class="switch-button" onclick="switchPage(1)"></button>
+  <div id="page2" class="page">
+    <div class="title">Apps</div>
+    <div class="content">
+    <div class="apps-wrapper">
+        <div class="apps-container" id="shortcutsGrid"></div>
         </div>
     </div>
-    <script src="tile.js"></script>
+</div>
+</div>
 
-    <script src="apps.js"></script>
-    <script>
-        function switchPage(pageNumber) {
-            const container = document.getElementById('container');
-            if (pageNumber === 1) {
-                container.classList.remove('move-to-apps');
-            } else if (pageNumber === 2) {
-                container.classList.add('move-to-apps');
-            }
-        }
-        let currentPage = 1;
-        document.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && event.key === 'Tab') {
-                event.preventDefault();
+  </div>
 
-                currentPage = currentPage === 1 ? 2 : 1;
+  <div id="contextMenu" class="context-menu">
+    <div class="context-menu-item" onclick="deleteTile()">
+       
+      <i>📌</i>  
+       <span>Unpin from Start</span>
+   </div>
+    <div class="context-menu-item" onclick="toggleTileSize()">
+          <i>🔄</i> 
+        <span>Toggle Size</span>
+    </div>
 
-                switchPage(currentPage);
-            }
-        });
-    </script>
+</div>
+
+<div id="appContextMenu" class="context-menu">
+    <div class="context-menu-item" onclick="pinAppToStart()">
+      <i>📌</i>  
+        <span>Pin to Start</span>
+    </div>
+</div>
+<script src="./apps.js"></script>
+<script src="./tile.js"></script>
+
+<script src="./user.js"></script>
+  <script>
+    let currentPage = 1;
+    const totalPages = 2;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'Tab') {
+        e.preventDefault();
+
+        document.getElementById(`page${currentPage}`).classList.remove('active');
+        document.getElementById(`page${currentPage}`).classList.add('hidden');
+        currentPage = currentPage % totalPages + 1;
+
+        document.getElementById(`page${currentPage}`).classList.add('active');
+      }
+    });
+
+    
+    const { ipcRenderer } = require('electron');
+
+// Function to switch pages
+function switchToPage(pageNumber) {
+    document.querySelectorAll('.page').forEach((page, index) => {
+        page.classList.toggle('active', index === pageNumber - 1);
+        page.classList.toggle('hidden', index !== pageNumber - 1);
+    });
+    currentPage = pageNumber;
+}
+
+// Handle IPC message for navigating to Apps
+ipcRenderer.on('navigate-to-apps', () => {
+    switchToPage(2); // Assuming "Apps" is page 2
+});
+
+  </script>
 </body>
-
 </html>

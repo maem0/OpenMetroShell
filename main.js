@@ -26,6 +26,7 @@ function createSidebar() {
         alwaysOnTop: true,
         transparent: true,
         resizable: false,
+        sandbox: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
@@ -77,6 +78,13 @@ function createSidebar() {
             }
         }
     }
+
+    ipcMain.on('navigate-to-apps', () => {
+        if (startScreenWindow) {
+            startScreenWindow.webContents.send('navigate-to-apps');
+        }
+    });
+    
 
     function fadeOutSidebar() {
         let opacity = 1;
