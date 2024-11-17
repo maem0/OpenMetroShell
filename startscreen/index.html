@@ -19,6 +19,7 @@
 
   <div id="page1" class="page active">
     <h1 class="title">Start</h1>
+    <div id="parallaxImage" class="parallax-image"></div>
     <div class="content">
         <div class="tile-container" id="tileContainer">
             <div class="droparea" id="leftdroparea"></div>
@@ -61,39 +62,55 @@
 <script src="./tile.js"></script>
 
 <script src="./user.js"></script>
-  <script>
-    let currentPage = 1;
-    const totalPages = 2;
+<script>
+  let currentPage = 1;
+  const totalPages = 2;
 
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'Tab') {
-        e.preventDefault();
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Tab') {
+      e.preventDefault();
 
-        document.getElementById(`page${currentPage}`).classList.remove('active');
-        document.getElementById(`page${currentPage}`).classList.add('hidden');
-        currentPage = currentPage % totalPages + 1;
+      document.getElementById(`page${currentPage}`).classList.remove('active');
+      document.getElementById(`page${currentPage}`).classList.add('hidden');
+      currentPage = currentPage % totalPages + 1;
 
-        document.getElementById(`page${currentPage}`).classList.add('active');
-      }
+      document.getElementById(`page${currentPage}`).classList.add('active');
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ipcRenderer.on('set-initial-view', (event, view) => {
+        if (view === 'apps') {
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
     });
-
-    
-    const { ipcRenderer } = require('electron');
-
-// Function to switch pages
-function switchToPage(pageNumber) {
-    document.querySelectorAll('.page').forEach((page, index) => {
-        page.classList.toggle('active', index === pageNumber - 1);
-        page.classList.toggle('hidden', index !== pageNumber - 1);
-    });
-    currentPage = pageNumber;
-}
-
-// Handle IPC message for navigating to Apps
-ipcRenderer.on('navigate-to-apps', () => {
-    switchToPage(2); // Assuming "Apps" is page 2
 });
 
-  </script>
+document.addEventListener('DOMContentLoaded', () => {
+    const ipcRenderer = require('electron').ipcRenderer;
+    
+    ipcRenderer.on('set-initial-view', (event, view) => {
+        switchView(view);
+    });
+    
+    ipcRenderer.on('switch-view', (event, view) => {
+        switchView(view);
+    });
+    
+    function switchView(view) {
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        
+        if (view === 'apps') {
+            page1.classList.remove('active');
+            page2.classList.add('active');
+        } else {
+            page2.classList.remove('active');
+            page1.classList.add('active');
+        }
+    }
+});
+</script>
 </body>
 </html>

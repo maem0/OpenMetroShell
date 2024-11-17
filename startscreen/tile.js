@@ -507,7 +507,10 @@ initializeContainer();
 document.addEventListener('DOMContentLoaded', loadTileState);
 
 document.querySelector('.tile-container').addEventListener('scroll', function(e) {
-	const scrollPosition = e.target.scrollLeft;
-	const firstPage = document.querySelector('.page:nth-child(1)');
-	firstPage.style.backgroundPosition = `${-scrollPosition * 0.2}px center`;
+    const scrollPosition = e.target.scrollLeft;
+    const parallaxImage = document.getElementById('parallaxImage');
+
+    const offset = scrollPosition * 0.3;
+
+    parallaxImage.style.backgroundPosition = `${-offset}px center`;
 });

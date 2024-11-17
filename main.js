@@ -1,14 +1,8 @@
-const {
-    app,
-    BrowserWindow,
-    screen,
-    ipcMain
-} = require('electron');
+const { app, BrowserWindow, screen, ipcMain } = require('electron');
 const path = require('path');
 
 let sidebarWindow;
 let startScreenWindow;
-
 function createSidebar() {
     const {
         width,
@@ -78,12 +72,6 @@ function createSidebar() {
             }
         }
     }
-
-    ipcMain.on('navigate-to-apps', () => {
-        if (startScreenWindow) {
-            startScreenWindow.webContents.send('navigate-to-apps');
-        }
-    });
     
 
     function fadeOutSidebar() {
@@ -115,16 +103,13 @@ function createSidebar() {
     });
 }
 
-function createStartScreen() {
+function createStartScreen(initialView = 'start') {
     if (startScreenWindow) {
         startScreenWindow.focus();
         return;
     }
 
-    const {
-        width,
-        height
-    } = screen.getPrimaryDisplay().workAreaSize;
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
     startScreenWindow = new BrowserWindow({
         width: width,
@@ -145,6 +130,7 @@ function createStartScreen() {
 
     startScreenWindow.once('ready-to-show', () => {
         startScreenWindow.show();
+        startScreenWindow.webContents.send('set-initial-view', initialView);
         sidebarWindow.setAlwaysOnTop(true, 'screen-saver');
     });
 
@@ -153,8 +139,8 @@ function createStartScreen() {
     });
 }
 
-ipcMain.on('open-start-screen', () => {
-    createStartScreen();
+ipcMain.on('open-start-screen', (event, view) => {
+    createStartScreen(view);
 });
 
 ipcMain.on('close-start-screen', () => {

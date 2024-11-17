@@ -3,3 +3,5 @@
 /node_modules
 package-lock.json
 /OpenMetroShell-win32-x64
+/startscreen/node_modules
+OpenMetroShell-win32-x64.zip

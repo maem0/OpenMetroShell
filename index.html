@@ -255,8 +255,10 @@ padding: 5px;
             });
     
             document.getElementById('search-button').addEventListener('click', () => {
-                window.electron.navigateToApps();
-            });
+    window.electron.openStartScreen('apps');
+});
+
+
         </script>
         
 </body>

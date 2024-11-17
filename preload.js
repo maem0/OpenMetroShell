@@ -1,7 +1,4 @@
-const {
-    contextBridge,
-    ipcRenderer
-} = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
     onUpdateState: (callback) => {
@@ -9,18 +6,19 @@ contextBridge.exposeInMainWorld('electron', {
             callback(state);
         });
     },
-    openStartScreen: () => {
-        ipcRenderer.send('open-start-screen');
+    openStartScreen: (view) => {
+        ipcRenderer.send('open-start-screen', view);
     },
     closeStartScreen: () => {
         ipcRenderer.send('close-start-screen');
     },
+    switchToApps: () => {
+        ipcRenderer.send('switch-to-apps');
+    },
+    switchToStart: () => {
+        ipcRenderer.send('switch-to-start');
+    },
     showDesktop: () => {
         ipcRenderer.send('show-desktop');
-    },
-
-        navigateToApps: () => {
-            ipcRenderer.send('navigate-to-apps');
-        },
-    });
-    
+    }
+});
