@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Menu</title>
+    <link id="themeStylesheet" rel="stylesheet">
+    <link rel="stylesheet" href="sidebar.css"> 
+</head>
+<body>
+
+    <div id="sidebar" class="sidebar">
+        <button onclick="changeTheme('80.css')">80.css</button>
+        <button onclick="changeTheme('81.css')">81.css</button>
+        <button onclick="closeSidebar()">Close</button>
+    </div>
+
+    <div id="mainContent">
+ 
+    </div>
+
+
+
+    <script src="./apps.js"></script>
+    <script src="./tile.js"></script>
+    <script src="./user.js"></script>
+
+    <script>
+function load80Layout() {
+    const mainContent = document.getElementById('mainContent');
+    mainContent.innerHTML = `
+        <!-- Your 8.0 HTML Structure Here -->
+        <div class="user-dropdown" id="userDropdown">
+            <div class="user-icon" id="userIcon" onclick="toggleDropdown()">
+                <span id="username">User</span>
+                <img src="User.png" alt="User Icon">
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <div class="dropdown-item" onclick="changeUserIcon()">Change User Icon</div>
+                <div class="dropdown-item" onclick="lockScreen()">Lock</div>
+                <div class="dropdown-item" onclick="signOut()">Sign Out</div>
+            </div>
+        </div>
+        <div id="page1" class="page active">
+            <h1 class="title">Start</h1>
+            <div id="parallaxImage" class="parallax-image"></div>
+            <div class="content">
+                <div class="tile-container" id="tileContainer">
+                    <div class="droparea" id="leftdroparea"></div>
+                </div>
+            </div>
+        </div>
+        <div id="page2" class="page">
+            <div class="title">Apps</div>
+            <div class="content">
+                <div class="apps-wrapper">
+                    <div class="apps-container" id="shortcutsGrid"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    bind80Events();
+}
+
+function load81Layout() {
+    const mainContent = document.getElementById('mainContent');
+    mainContent.innerHTML = `
+      <div class="container" id="container">
+        <div class="page start">
+            <div class="title">Start</div>
+
+            <div id="usercard">
+                User
+                <div id="usericon"></div>
+            </div>
+            <div class="grids-container" id="gridsContainer"></div>
+            <button class="switch-button" onclick="switchPage(2)"></button>
+        </div>
+        <div class="page apps">
+            <div class="title">Apps</div>
+            <div class="grid-container" id="shortcutsGrid"></div>
+
+            <button class="switch-button" onclick="switchPage(1)"></button>
+        </div>
+    </div>
+    `;
+
+    bind81Events();
+}
+
+function bind80Events() {
+    let currentPage = 1;
+    const totalPages = 2;
+
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'Tab') {
+            e.preventDefault();
+            document.getElementById(`page${currentPage}`).classList.remove('active');
+            document.getElementById(`page${currentPage}`).classList.add('hidden');
+            currentPage = currentPage % totalPages + 1;
+            document.getElementById(`page${currentPage}`).classList.add('active');
+        }
+    });
+}
+
+function bind81Events() {
+    let currentPage = 1;
+    document.addEventListener('keydown', function (event) {
+        if (event.ctrlKey && event.key === 'Tab') {
+            event.preventDefault();
+            currentPage = currentPage === 1 ? 2 : 1;
+            switchPage(currentPage);
+        }
+    });
+
+    function switchPage(pageNumber) {
+        const container = document.getElementById('container');
+        if (pageNumber === 1) {
+            container.classList.remove('move-to-apps');
+        } else if (pageNumber === 2) {
+            container.classList.add('move-to-apps');
+        }
+    }
+}
+
+function changeTheme(theme) {
+    const themeLink = document.getElementById('themeStylesheet');
+    themeLink.href = theme;
+
+    if (theme === '80.css') {
+        load80Layout();
+    } else if (theme === '81.css') {
+        load81Layout();
+    }
+}
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+}
+
+function closeSidebar() {
+    document.getElementById('sidebar').style.display = 'none';
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'o') {
+        e.preventDefault();
+        toggleSidebar();
+    }
+});
+
+load80Layout();
+
+    </script>
+</body>
+</html>
