@@ -216,23 +216,23 @@ padding: 5px;
     </div>    
       <script>
         function updateTimeAndDate() {
-          const now = new Date();
-          const hours = now.getHours().toString().padStart(2, '0');
-          const minutes = now.getMinutes().toString().padStart(2, '0');
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
     
-          const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-          const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-          
-          const day = days[now.getDay()];
-          const date = now.getDate();
-          const month = months[now.getMonth()];
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = now.toLocaleDateString(undefined, options);
+    
+    const [day, dateMonth] = formattedDate.split(', ');
+    const [dayOfMonth, month] = dateMonth.split(' ');
 
-          document.getElementById('time').textContent = `${hours}:${minutes}`;
-          document.getElementById('day-date').innerHTML = `${day}<br>${date} ${month}`;
-        }
+    document.getElementById('time').textContent = `${hours}:${minutes}`;
+    document.getElementById('day-date').innerHTML = `${day}<br>${dayOfMonth} ${month}`;
+}
 
-        updateTimeAndDate();
-        setInterval(updateTimeAndDate, 60000);
+updateTimeAndDate();
+setInterval(updateTimeAndDate, 60000);
+
       </script>
 
     <script>
