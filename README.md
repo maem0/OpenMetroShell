@@ -1,3 +1,4 @@
+### OBSELETE (and slow), GO USE  [THIS](https://github.com/valinet/ExplorerPatcher/wiki/ExplorerPatcher%27s-taskbar-implementation) INSTEAD, ITS THE REAL AND FULL START SCREEN FOR WINDOWS 8
 # OpenMetroShell
  Charms Bar, Start Screen, and other Metro elements in Electron for windows 10/11.
 
